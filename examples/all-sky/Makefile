@@ -1,6 +1,7 @@
 # Location of RTE+RRTMGP libraries, module files.
-RRTMGP_BUILD = $(RRTMGP_ROOT)/build
+#RRTMGP_BUILD = $(RRTMGP_ROOT)/build
 # Sets macros FC, FCFLAGS consistent with RTE+RRTMGP
+-include Makefile.libs
 -include $(RRTMGP_BUILD)/Makefile.conf
 
 # Location of netcdf C and Fortran libraries. Could specify with environment variables if file doesn't exist

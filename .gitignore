@@ -22,3 +22,6 @@ Makefile.conf
 *.HTML
 *.html
 *.gif
+
+# Microsoft docx
+*.docx

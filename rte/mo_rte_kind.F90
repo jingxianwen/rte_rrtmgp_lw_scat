@@ -32,6 +32,11 @@ module mo_rte_kind
   !
   ! Note that c_boolians don't work with PGI compiler currently
   !
+
+! add by Xianwen Jing. 2020.05.18 -->
+#define USE_CBOOL 
+! <--
+
 #ifdef USE_CBOOL
   integer, parameter :: wl = c_bool
 #else

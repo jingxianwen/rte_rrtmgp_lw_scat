@@ -26,6 +26,9 @@ module mo_cloud_optics
                               ty_optical_props_1scl, &
                               ty_optical_props_2str, &
                               ty_optical_props_nstr
+!! U-MICH added -->
+  use mo_ice_optics_mc6, only: compute_all_from_mc6, flag_mc6
+!! <--
   implicit none
   interface pade_eval
     module procedure pade_eval_nbnd, pade_eval_1
@@ -375,6 +378,10 @@ contains
     integer  :: icol, ilay, ibnd
     ! scalars for total tau, tau*ssa
     real(wp) :: tau, taussa
+!! U-MICH added -->
+    logical :: is_sw, is_lw
+    common /wave_range/ is_sw, is_lw
+!! <--
     ! ----------------------------------------
     !
     ! Error checking
@@ -463,12 +470,19 @@ contains
         !
         ! Ice
         !
-        call compute_all_from_table(ncol, nlay, nbnd, icemsk, ciwp, reice, &
-                                    this%ice_nsteps,this%ice_step_size,this%radice_lwr, &
-                                    this%lut_extice(:,:,this%icergh),      &
-                                    this%lut_ssaice(:,:,this%icergh),      &
-                                    this%lut_asyice(:,:,this%icergh),      &
-                                    itau, itaussa, itaussag)
+!! Two ice optics options (U-MICH added MC6 ice optics) -->
+        if (is_lw .and. flag_mc6) then 
+          call compute_all_from_mc6(ncol, nlay, nbnd, icemsk, ciwp, reice, &
+                                      itau, itaussa, itaussag)
+        else
+          call compute_all_from_table(ncol, nlay, nbnd, icemsk, ciwp, reice, &
+                                      this%ice_nsteps,this%ice_step_size,this%radice_lwr, &
+                                      this%lut_extice(:,:,this%icergh),      &
+                                      this%lut_ssaice(:,:,this%icergh),      &
+                                      this%lut_asyice(:,:,this%icergh),      &
+                                      itau, itaussa, itaussag)
+        end if !(is_lw .and. flag_mc6)
+!! <--         
       else
         !
         ! Cloud optical properties from Pade coefficient method
@@ -481,12 +495,19 @@ contains
                                   2, 2, this%pade_sizreg_ssaliq, this%pade_ssaliq, &
                                   2, 2, this%pade_sizreg_asyliq, this%pade_asyliq, &
                                   ltau, ltaussa, ltaussag)
-        call compute_all_from_pade(ncol, nlay, nbnd, nsizereg, &
-                                  icemsk, ciwp, reice,        &
-                                  2, 3, this%pade_sizreg_extice, this%pade_extice(:,:,:,this%icergh), &
-                                  2, 2, this%pade_sizreg_ssaice, this%pade_ssaice(:,:,:,this%icergh), &
-                                  2, 2, this%pade_sizreg_asyice, this%pade_asyice(:,:,:,this%icergh), &
-                                  itau, itaussa, itaussag)
+!! Two ice optics options (U-MICH added MC6 ice optics) -->
+        if (is_lw .and. flag_mc6) then 
+          call compute_all_from_mc6(ncol, nlay, nbnd, icemsk, ciwp, reice, &
+                                      itau, itaussa, itaussag)
+        else
+          call compute_all_from_pade(ncol, nlay, nbnd, nsizereg, &
+                                    icemsk, ciwp, reice,        &
+                                    2, 3, this%pade_sizreg_extice, this%pade_extice(:,:,:,this%icergh), &
+                                    2, 2, this%pade_sizreg_ssaice, this%pade_ssaice(:,:,:,this%icergh), &
+                                    2, 2, this%pade_sizreg_asyice, this%pade_asyice(:,:,:,this%icergh), &
+                                    itau, itaussa, itaussag)
+        end if !(is_lw .and. flag_mc6)
+!! <--
       endif
 
       !

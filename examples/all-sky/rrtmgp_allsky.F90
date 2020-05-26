@@ -305,6 +305,7 @@ program rte_rrtmgp_clouds
       rei(icol,ilay) = merge(rei_val, 0._wp, iwp(icol,ilay) > 0._wp)
     end do
   end do
+
   !$acc exit data delete(cloud_mask)
   ! ----------------------------------------------------------------------------
   !
