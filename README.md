@@ -1,3 +1,7 @@
+# Longwave Scattering of ice clouds
+The MC6 ice cloud longwave scattering properties are implemented as an option. One can turn on/off this new feature by setting flag_mc6=.true./.false.. 
+See the introduction documents in ./examples/all-sky-XJ/doc/ for how to run the model, as well as the testing results with an artificial ice cloud layer. 
+
 # RTE+RRTMGP
 
 This is the repository for RTE+RRTMGP, a set of codes for computing radiative fluxes in planetary atmospheres. RTE+RRTMGP is described in a [paper](https://doi.org/10.1029/2019MS001621) in [Journal of Advances in Modeling Earth Systems](http://james.agu.org).
